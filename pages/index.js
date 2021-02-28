@@ -12,24 +12,51 @@ export const config = {
   per_page: 15,
 }
 
+const NotFound = ({searchQuery, allResults, loading}) => {
+  if (searchQuery.q && allResults.items.length === 0 && !loading) {
+    return <p className="p-5 pl-0">No results found 😿</p>
+  }
+  return null;
+}
+
+const Loading = ({loading}) => {
+  if (loading) {
+    return (
+      <div className="flex justify-center m-20">
+        <Image
+          className="animate-spin-slow"
+          src="/Octocat.png"
+          alt="loading"
+          width={300}
+          height={300}
+        />
+      </div>
+    );
+  }
+  return null;
+}
+
 export default function Home(props) {
   const {auth, query} = props;
   const [searchQuery, setSearchQuery] = useState(query);
   const [allResults, setAllResults] = useState({items: [], total_count: 0});
   const [currentUsername, setCurrentUsername] = useState('');
+  const [loading, setLoading] = useState(true);
   const octokit = new Octokit({auth});
   const {items, total_count: total} = allResults;
   const {page} = searchQuery;
 
   useEffect(() => {
     if (searchQuery?.q) {
+      setLoading(true);
       octokit
         .request('GET /search/users', searchQuery)
         .then(res => {
           setAllResults(res.data);
-        }).catch(err => console.log(err));
+        })
+        .catch(err => console.log(err))
+        .finally(() => setLoading(false));
     }
-
   }, [searchQuery]);
 
   return (
@@ -38,11 +65,14 @@ export default function Home(props) {
         <title>Git Search</title>
         <link rel="icon" href="/favicon.ico"/>
       </Head>
-      <main className="m-auto max-w-4xl">
+      <main className="m-auto max-w-4xl ">
         <SearchForm setSearchQuery={setSearchQuery}
-                    searchQuery={searchQuery}/>
-        {(searchQuery.q && allResults.items.length === 0) && <p className="p-5 pl-0">No results found 😿</p>}
-
+                    searchQuery={searchQuery}
+                    loading={loading}/>
+        <NotFound searchQuery={searchQuery}
+                  allResults={allResults}
+                  loading={loading}/>
+        <Loading loading={loading}/>
         <SearchResults items={items}
                        setCurrentUserName={setCurrentUsername}/>
         <Details username={currentUsername}

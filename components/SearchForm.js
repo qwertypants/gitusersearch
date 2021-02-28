@@ -8,6 +8,7 @@ export default function SearchForm({searchQuery, setSearchQuery}) {
     const newQuery = {
       ...searchQuery,
       page: 1,
+      items: 0,
       q: username
     };
     setSearchQuery(newQuery);
@@ -16,7 +17,7 @@ export default function SearchForm({searchQuery, setSearchQuery}) {
   const disableButton = username?.length === 0;
 
   return (
-    <form onSubmit={handleSearch} id="search" className="sticky top-0 z-10">
+    <form onSubmit={handleSearch} id="search" className="sticky top-0 z-10 px-2">
       <div
         className="bg-white mt-6 pt-4 pb-5 border-b border-gray-200 sm:flex sm:items-center sm:justify-between">
         <h3 className="text-lg leading-6 font-medium text-gray-900">
@@ -36,7 +37,7 @@ export default function SearchForm({searchQuery, setSearchQuery}) {
               </div>
               <input type="text" name="search-users" id="search-users"
                      onChange={(event) => setUsername(event.target.value)}
-                     className="hidden focus:ring-red-500 focus:border-red-500 w-full rounded-none rounded-l-md pl-10 sm:block sm:text-sm border-gray-300"
+                     className=" focus:ring-red-500 focus:border-red-500 w-full rounded-none rounded-l-md pl-10  sm:text-sm border-gray-300"
               />
             </div>
             <button type="button"
