@@ -76,6 +76,7 @@ export default function Home(props) {
         <SearchResults items={items}
                        setCurrentUserName={setCurrentUsername}/>
         <Details username={currentUsername}
+                 setCurrentUsername={setCurrentUsername}
                  auth={auth}/>
         <Pagination page={page}
                     total={total}

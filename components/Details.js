@@ -15,11 +15,16 @@ const LineItem = ({title, value}) => {
   )
 }
 
-export default function Details({username, auth}) {
+export default function Details({username, auth, setCurrentUsername}) {
   const octokit = new Octokit({auth});
   const [user, setUser] = useState({});
   const [open, setOpen] = useState(false);
   const {name, login, avatar_url, bio, company, followers, following, location, public_gists, public_repos} = user;
+
+  function handleClose() {
+    setOpen(false);
+    setCurrentUsername('');
+  }
 
   useEffect(() => {
     if (username) {
@@ -48,7 +53,7 @@ export default function Details({username, auth}) {
                   </h2>
                   <div className="ml-3 h-7 flex items-center">
                     <button
-                      onClick={() => setOpen(false)}
+                      onClick={handleClose}
                       className="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-indigo-500">
                       <span className="sr-only">Close panel</span>
 
